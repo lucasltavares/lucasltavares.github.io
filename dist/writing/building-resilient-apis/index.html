@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="en" data-theme="dark" data-astro-cid-37fxchfa> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="Astro v5.16.7"><!-- SEO tags injected via slot --><!-- Page Title --><title>Building Resilient APIs: Patterns for Production - Writing | Your Name</title><!-- Meta Description --><meta name="description" content="A practical guide to building APIs that gracefully handle failures, with real-world examples from production systems."><!-- Canonical URL --><link rel="canonical" href="https://lucasltavares.github.io/writing/building-resilient-apis/"><!-- Author --><meta name="author" content="Your Name"><!-- Open Graph Tags --><meta property="og:type" content="article"><meta property="og:url" content="https://lucasltavares.github.io/writing/building-resilient-apis/"><meta property="og:title" content="Building Resilient APIs: Patterns for Production - Writing"><meta property="og:description" content="A practical guide to building APIs that gracefully handle failures, with real-world examples from production systems."><meta property="og:image" content="https://example.com/og-image.png"><meta property="og:site_name" content="Professional Portfolio"><!-- Article-specific Open Graph tags --><meta property="article:published_time" content="2025-09-28T00:00:00.000Z"><meta property="article:modified_time" content="2025-09-30T00:00:00.000Z"><!-- Twitter Card Tags --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:url" content="https://lucasltavares.github.io/writing/building-resilient-apis/"><meta name="twitter:title" content="Building Resilient APIs: Patterns for Production - Writing"><meta name="twitter:description" content="A practical guide to building APIs that gracefully handle failures, with real-world examples from production systems."><meta name="twitter:image" content="https://example.com/og-image.png"><!-- Favicon --><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#0a0a0a"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><!-- Prevent flash of wrong theme --><script>
+      (function() {
+        const stored = localStorage.getItem('theme');
+        const theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script><!-- Preserve theme during View Transitions --><script>
+      document.addEventListener('astro:before-swap', (e) => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        e.newDocument.documentElement.setAttribute('data-theme', theme);
+      });
+    </script><link rel="stylesheet" href="/_astro/contact.ynN08qLE.css">
+<link rel="stylesheet" href="/_astro/_slug_.7Hh-84VG.css">
+<style>.scroll-to-top[data-astro-cid-73562bqz]{position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--color-bg-secondary);border:1px solid var(--color-border);border-radius:var(--border-radius-sm);color:var(--color-text-secondary);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s ease,visibility .2s ease,transform .2s ease,background .2s ease,color .2s ease,border-color .2s ease;z-index:50}.scroll-to-top[data-astro-cid-73562bqz]:hover{background:var(--color-bg-elevated);color:var(--color-text);border-color:var(--color-text-muted)}.scroll-to-top[data-astro-cid-73562bqz]:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}.scroll-to-top[data-astro-cid-73562bqz].is-visible{opacity:1;visibility:visible;transform:translateY(0)}@media(max-width:640px){.scroll-to-top[data-astro-cid-73562bqz]{bottom:1.5rem;right:1.5rem;width:40px;height:40px}}.back-link-container[data-astro-cid-c4cqltiy]{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--color-border)}.back-link[data-astro-cid-c4cqltiy]{display:inline-flex;align-items:center;gap:.5rem;font-size:.9375rem;font-weight:500;color:var(--color-text-muted);text-decoration:none;transition:color .2s ease}.back-link[data-astro-cid-c4cqltiy]:hover{color:var(--color-text)}.back-icon[data-astro-cid-c4cqltiy]{width:16px;height:16px;transition:transform .2s ease}.back-link[data-astro-cid-c4cqltiy]:hover .back-icon[data-astro-cid-c4cqltiy]{transform:translate(-3px)}
+</style></head> <body data-astro-cid-37fxchfa> <header class="site-header" data-astro-cid-37fxchfa data-astro-transition-persist="astro-4hoqgnvm-1"> <nav class="site-nav" aria-label="Main navigation" data-astro-cid-pux6a34n> <div class="nav-scroll" data-astro-cid-pux6a34n> <ul class="nav-list" data-astro-cid-pux6a34n> <li class="nav-item" data-astro-cid-pux6a34n> <a href="/" class="nav-link" data-astro-cid-pux6a34n> Home </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/projects" class="nav-link" data-astro-cid-pux6a34n> Projects </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/decisions" class="nav-link" data-astro-cid-pux6a34n> Decisions </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/journey" class="nav-link" data-astro-cid-pux6a34n> Journey </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/writing" class="nav-link nav-link--active" aria-current="page" data-astro-cid-pux6a34n> Writing </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/speaking" class="nav-link" data-astro-cid-pux6a34n> Speaking </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/uses" class="nav-link" data-astro-cid-pux6a34n> Uses </a> </li><li class="nav-item" data-astro-cid-pux6a34n> <a href="/contact" class="nav-link" data-astro-cid-pux6a34n> Contact </a> </li> </ul> </div> <div class="nav-end" data-astro-cid-pux6a34n> <button class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line> <line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line> <line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script type="module">const o=()=>{const e=localStorage.getItem("theme");return e==="light"||e==="dark"?e:window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"},t=e=>{document.documentElement.setAttribute("data-theme",e),localStorage.setItem("theme",e)},c=()=>{const e=document.documentElement.getAttribute("data-theme");t(e==="dark"?"light":"dark")};document.addEventListener("click",e=>{e.target.closest(".theme-toggle")&&c()});window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",e=>{localStorage.getItem("theme")||t(e.matches?"light":"dark")});t(o());</script> </div> </nav> <script type="module">function r(){const n=window.location.pathname;document.querySelectorAll(".nav-link").forEach(t=>{const a=t.getAttribute("href");let e=!1;a==="/"?e=n==="/":a&&(e=n.startsWith(a)),t.classList.toggle("nav-link--active",e),e?t.setAttribute("aria-current","page"):t.removeAttribute("aria-current")})}document.addEventListener("astro:page-load",r);</script>  </header> <main data-astro-cid-37fxchfa>   <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Building Resilient APIs: Patterns for Production",
+  "description": "A practical guide to building APIs that gracefully handle failures, with real-world examples from production systems.",
+  "author": {
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://example.com"
+  },
+  "datePublished": "2025-09-28T00:00:00.000Z",
+  "dateModified": "2025-09-30T00:00:00.000Z",
+  "image": "https://example.com/og-image.png",
+  "publisher": {
+    "@type": "Person",
+    "name": "Your Name",
+    "url": "https://example.com"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://lucasltavares.github.io/writing/building-resilient-apis/"
+  },
+  "keywords": "api-design, resilience, production, best-practices",
+  "inLanguage": "en"
+}</script> <main class="article" data-astro-cid-jxnjfbl4> <!-- Article Header --> <header class="article-header" data-astro-cid-jxnjfbl4> <h1 data-astro-cid-jxnjfbl4>Building Resilient APIs: Patterns for Production</h1> <div class="article-meta" data-astro-cid-jxnjfbl4> <time class="publish-date" datetime="2025-09-28T00:00:00.000Z" data-astro-cid-jxnjfbl4> September 27, 2025 </time> <span class="meta-separator" data-astro-cid-jxnjfbl4>·</span> <span class="reading-time" data-astro-cid-jxnjfbl4>3 min read</span>  <span class="meta-separator" data-astro-cid-jxnjfbl4>·</span> <time class="updated-date" datetime="2025-09-30T00:00:00.000Z" data-astro-cid-jxnjfbl4>
+Updated September 29, 2025 </time>  </div> <div class="article-tags" data-astro-cid-jxnjfbl4> <span class="tag" data-astro-cid-jxnjfbl4>api-design</span><span class="tag" data-astro-cid-jxnjfbl4>resilience</span><span class="tag" data-astro-cid-jxnjfbl4>production</span><span class="tag" data-astro-cid-jxnjfbl4>best-practices</span> </div> </header> <!-- Table of Contents (conditionally rendered if 3+ sections) --> <nav class="table-of-contents" aria-label="Table of contents" data-astro-cid-xvrfupwn><button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list" data-astro-cid-xvrfupwn><span class="toc-title" data-astro-cid-xvrfupwn>Table of Contents</span><span class="toc-count" data-astro-cid-xvrfupwn>24 sections</span><svg class="toc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-xvrfupwn><polyline points="6 9 12 15 18 9" data-astro-cid-xvrfupwn></polyline></svg></button><ul class="toc-list" id="toc-list" data-astro-cid-xvrfupwn><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#introduction" class="toc-link" data-astro-cid-xvrfupwn>Introduction</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#circuit-breaker-pattern" class="toc-link" data-astro-cid-xvrfupwn>Circuit Breaker Pattern</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-problem" class="toc-link" data-astro-cid-xvrfupwn>The Problem</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-solution" class="toc-link" data-astro-cid-xvrfupwn>The Solution</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#real-world-impact" class="toc-link" data-astro-cid-xvrfupwn>Real-World Impact</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#retry-with-exponential-backoff" class="toc-link" data-astro-cid-xvrfupwn>Retry with Exponential Backoff</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-problem-1" class="toc-link" data-astro-cid-xvrfupwn>The Problem</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-solution-1" class="toc-link" data-astro-cid-xvrfupwn>The Solution</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#when-to-retry" class="toc-link" data-astro-cid-xvrfupwn>When to Retry</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#timeouts" class="toc-link" data-astro-cid-xvrfupwn>Timeouts</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-problem-2" class="toc-link" data-astro-cid-xvrfupwn>The Problem</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-solution-2" class="toc-link" data-astro-cid-xvrfupwn>The Solution</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#choosing-timeout-values" class="toc-link" data-astro-cid-xvrfupwn>Choosing Timeout Values</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#graceful-degradation" class="toc-link" data-astro-cid-xvrfupwn>Graceful Degradation</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-problem-3" class="toc-link" data-astro-cid-xvrfupwn>The Problem</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-solution-3" class="toc-link" data-astro-cid-xvrfupwn>The Solution</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#rate-limiting" class="toc-link" data-astro-cid-xvrfupwn>Rate Limiting</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-problem-4" class="toc-link" data-astro-cid-xvrfupwn>The Problem</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#the-solution-4" class="toc-link" data-astro-cid-xvrfupwn>The Solution</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#monitoring-and-observability" class="toc-link" data-astro-cid-xvrfupwn>Monitoring and Observability</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#essential-metrics" class="toc-link" data-astro-cid-xvrfupwn>Essential Metrics</a></li><li class="toc-item toc-depth-3" data-astro-cid-xvrfupwn><a href="#structured-logging" class="toc-link" data-astro-cid-xvrfupwn>Structured Logging</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#conclusion" class="toc-link" data-astro-cid-xvrfupwn>Conclusion</a></li><li class="toc-item toc-depth-2" data-astro-cid-xvrfupwn><a href="#further-reading" class="toc-link" data-astro-cid-xvrfupwn>Further Reading</a></li></ul></nav><script type="module">function c(){const t=document.querySelector(".toc-toggle"),n=document.querySelector(".toc-list");if(!t||!n)return;t.addEventListener("click",()=>{const e=t.getAttribute("aria-expanded")==="true";t.setAttribute("aria-expanded",String(!e)),n.classList.toggle("is-open")}),document.querySelectorAll(".toc-link").forEach(e=>{e.addEventListener("click",i=>{i.preventDefault();const o=e.getAttribute("href");if(!o)return;const r=document.querySelector(o);if(!r)return;const s=document.querySelector(".site-header")?.offsetHeight||0,d=r.getBoundingClientRect().top+window.scrollY-s-20;window.scrollTo({top:d,behavior:"smooth"}),history.pushState(null,"",o)})})}c();document.addEventListener("astro:after-swap",c);</script> <!-- Article Content --> <article class="article-content" data-astro-cid-jxnjfbl4> <h2 id="introduction">Introduction</h2>
+<p>APIs fail. Networks are unreliable, dependencies go down, and unexpected load happens. The difference between a good API and a great API is how it handles these failures.</p>
+<p>This guide covers practical patterns I’ve used to build resilient APIs in production.</p>
+<h2 id="circuit-breaker-pattern">Circuit Breaker Pattern</h2>
+<h3 id="the-problem">The Problem</h3>
+<p>When a downstream service is failing, continuing to call it:</p>
+<ul>
+<li>Wastes resources</li>
+<li>Increases latency</li>
+<li>Can cause cascading failures</li>
+</ul>
+<h3 id="the-solution">The Solution</h3>
+<p>A circuit breaker monitors failures and “opens” when a threshold is reached, immediately returning errors instead of calling the failing service.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> CircuitBreaker</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#FFAB70"> state</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> &#39;closed&#39;</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> &#39;open&#39;</span><span style="color:#F97583"> |</span><span style="color:#9ECBFF"> &#39;half-open&#39;</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> &#39;closed&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#FFAB70"> failureCount</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#FFAB70"> lastFailureTime</span><span style="color:#F97583">?:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  async</span><span style="color:#B392F0"> execute</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;(</span><span style="color:#B392F0">fn</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.state </span><span style="color:#F97583">===</span><span style="color:#9ECBFF"> &#39;open&#39;</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">shouldAttemptReset</span><span style="color:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.state </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;half-open&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">      } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">        throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Circuit breaker is open&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">      const</span><span style="color:#79B8FF"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> fn</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">      this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">onSuccess</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#E1E4E8"> result;</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#79B8FF">      this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">onFailure</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">      throw</span><span style="color:#E1E4E8"> error;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#B392F0"> onSuccess</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.failureCount </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.state </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;closed&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#B392F0"> onFailure</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.failureCount</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.lastFailureTime </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Date.</span><span style="color:#B392F0">now</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.failureCount </span><span style="color:#F97583">&gt;=</span><span style="color:#79B8FF"> FAILURE_THRESHOLD</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">      this</span><span style="color:#E1E4E8">.state </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;open&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#B392F0"> shouldAttemptReset</span><span style="color:#E1E4E8">()</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> Date.</span><span style="color:#B392F0">now</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.lastFailureTime</span><span style="color:#F97583">!</span><span style="color:#F97583"> &gt;</span><span style="color:#79B8FF"> RESET_TIMEOUT</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="real-world-impact">Real-World Impact</h3>
+<p>After implementing circuit breakers for our payment provider integrations:</p>
+<ul>
+<li>Reduced cascading failures by 90%</li>
+<li>Improved API response times during provider outages</li>
+<li>Better visibility into dependency health</li>
+</ul>
+<h2 id="retry-with-exponential-backoff">Retry with Exponential Backoff</h2>
+<h3 id="the-problem-1">The Problem</h3>
+<p>Transient failures are common (network blips, temporary overload). Immediate retries can make things worse.</p>
+<h3 id="the-solution-1">The Solution</h3>
+<p>Retry with exponentially increasing delays, plus jitter to avoid thundering herd.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> retryWithBackoff</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;(</span></span>
+<span class="line"><span style="color:#B392F0">  fn</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;,</span></span>
+<span class="line"><span style="color:#FFAB70">  maxRetries</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 3</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> lastError</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">let</span><span style="color:#E1E4E8"> attempt </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; attempt </span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8"> maxRetries; attempt</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> fn</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">      lastError </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> error;</span></span>
+<span class="line"><span style="color:#E1E4E8">      </span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (attempt </span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8"> maxRetries </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> delay</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">min</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#79B8FF">          1000</span><span style="color:#F97583"> *</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">pow</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, attempt) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">random</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 1000</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">          10000</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#B392F0"> sleep</span><span style="color:#E1E4E8">(delay);</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  throw</span><span style="color:#E1E4E8"> lastError</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="when-to-retry">When to Retry</h3>
+<p>Not all errors should be retried:</p>
+<ul>
+<li>✅ Network timeouts</li>
+<li>✅ 503 Service Unavailable</li>
+<li>✅ 429 Too Many Requests</li>
+<li>❌ 400 Bad Request</li>
+<li>❌ 401 Unauthorized</li>
+<li>❌ 404 Not Found</li>
+</ul>
+<h2 id="timeouts">Timeouts</h2>
+<h3 id="the-problem-2">The Problem</h3>
+<p>Without timeouts, a slow dependency can block your entire API.</p>
+<h3 id="the-solution-2">The Solution</h3>
+<p>Set aggressive timeouts and fail fast.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> withTimeout</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;(</span></span>
+<span class="line"><span style="color:#FFAB70">  promise</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt;,</span></span>
+<span class="line"><span style="color:#FFAB70">  timeoutMs</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">T</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> timeout</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#79B8FF"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">never</span><span style="color:#E1E4E8">&gt;((</span><span style="color:#FFAB70">_</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">reject</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    setTimeout</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#B392F0"> reject</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Timeout&#39;</span><span style="color:#E1E4E8">)), timeoutMs);</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#79B8FF"> Promise</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">race</span><span style="color:#E1E4E8">([promise, timeout]);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="choosing-timeout-values">Choosing Timeout Values</h3>
+<ul>
+<li><strong>P95 latency + buffer</strong>: If P95 is 200ms, set timeout to 500ms</li>
+<li><strong>Consider cascading timeouts</strong>: Each layer should have shorter timeout than the layer above</li>
+<li><strong>Monitor and adjust</strong>: Use metrics to tune timeout values</li>
+</ul>
+<h2 id="graceful-degradation">Graceful Degradation</h2>
+<h3 id="the-problem-3">The Problem</h3>
+<p>When a non-critical dependency fails, should your entire API fail?</p>
+<h3 id="the-solution-3">The Solution</h3>
+<p>Identify critical vs non-critical dependencies and degrade gracefully.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> getUserProfile</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">userId</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">user</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">preferences</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">recommendations</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#79B8FF"> Promise</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">allSettled</span><span style="color:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#B392F0">    fetchUser</span><span style="color:#E1E4E8">(userId),           </span><span style="color:#6A737D">// Critical</span></span>
+<span class="line"><span style="color:#B392F0">    fetchPreferences</span><span style="color:#E1E4E8">(userId),    </span><span style="color:#6A737D">// Non-critical</span></span>
+<span class="line"><span style="color:#B392F0">    fetchRecommendations</span><span style="color:#E1E4E8">(userId) </span><span style="color:#6A737D">// Non-critical</span></span>
+<span class="line"><span style="color:#E1E4E8">  ]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (user.status </span><span style="color:#F97583">===</span><span style="color:#9ECBFF"> &#39;rejected&#39;</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Failed to fetch user&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    user: user.value,</span></span>
+<span class="line"><span style="color:#E1E4E8">    preferences: preferences.status </span><span style="color:#F97583">===</span><span style="color:#9ECBFF"> &#39;fulfilled&#39;</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#F97583">      ?</span><span style="color:#E1E4E8"> preferences.value </span></span>
+<span class="line"><span style="color:#F97583">      :</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    recommendations: recommendations.status </span><span style="color:#F97583">===</span><span style="color:#9ECBFF"> &#39;fulfilled&#39;</span></span>
+<span class="line"><span style="color:#F97583">      ?</span><span style="color:#E1E4E8"> recommendations.value</span></span>
+<span class="line"><span style="color:#F97583">      :</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="rate-limiting">Rate Limiting</h2>
+<h3 id="the-problem-4">The Problem</h3>
+<p>Unlimited requests can overwhelm your API and downstream services.</p>
+<h3 id="the-solution-4">The Solution</h3>
+<p>Implement rate limiting at multiple levels:</p>
+<ol>
+<li><strong>Per-user limits</strong>: Prevent individual users from overwhelming the system</li>
+<li><strong>Global limits</strong>: Protect overall system capacity</li>
+<li><strong>Dependency limits</strong>: Respect downstream service limits</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> RateLimiter</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#FFAB70"> requests</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">string</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">number</span><span style="color:#E1E4E8">[]&gt;();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  async</span><span style="color:#B392F0"> checkLimit</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">key</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">limit</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">windowMs</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Promise</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">boolean</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> now</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Date.</span><span style="color:#B392F0">now</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> windowStart</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> now </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> windowMs;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> requests</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.requests.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(key) </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> recentRequests</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> requests.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">time</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> time </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> windowStart);</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (recentRequests.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> &gt;=</span><span style="color:#E1E4E8"> limit) {</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    recentRequests.</span><span style="color:#B392F0">push</span><span style="color:#E1E4E8">(now);</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.requests.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(key, recentRequests);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="monitoring-and-observability">Monitoring and Observability</h2>
+<h3 id="essential-metrics">Essential Metrics</h3>
+<p>Track these metrics for every API endpoint:</p>
+<ul>
+<li>Request rate</li>
+<li>Error rate</li>
+<li>Latency (P50, P95, P99)</li>
+<li>Dependency health</li>
+</ul>
+<h3 id="structured-logging">Structured Logging</h3>
+<p>Log enough context to debug issues:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#E1E4E8">logger.</span><span style="color:#B392F0">info</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Payment processed&#39;</span><span style="color:#E1E4E8">, {</span></span>
+<span class="line"><span style="color:#E1E4E8">  userId,</span></span>
+<span class="line"><span style="color:#E1E4E8">  paymentId,</span></span>
+<span class="line"><span style="color:#E1E4E8">  amount,</span></span>
+<span class="line"><span style="color:#E1E4E8">  provider,</span></span>
+<span class="line"><span style="color:#E1E4E8">  duration: Date.</span><span style="color:#B392F0">now</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> startTime,</span></span>
+<span class="line"><span style="color:#E1E4E8">  success: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>Building resilient APIs requires thinking about failure modes upfront. The patterns covered here—circuit breakers, retries, timeouts, graceful degradation, and rate limiting—form a solid foundation.</p>
+<p>Remember: failures will happen. The goal is to handle them gracefully and maintain a good user experience even when things go wrong.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://pragprog.com/titles/mnee2/release-it-second-edition/">Release It!</a> by Michael Nygard</li>
+<li><a href="https://sre.google/books/">Site Reliability Engineering</a> by Google</li>
+<li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a> by Martin Kleppmann</li>
+</ul> </article> <div class="back-link-container" data-astro-cid-c4cqltiy> <a href="/writing" class="back-link" data-astro-cid-c4cqltiy> <svg class="back-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-astro-cid-c4cqltiy> <path d="M9.70711 17.2929C10.0976 17.6834 10.0976 18.3166 9.70711 18.7071C9.31658 19.0976 8.68342 19.0976 8.29289 18.7071L2.29289 12.7071C1.90237 12.3166 1.90237 11.6834 2.29289 11.2929L8.29289 5.29289C8.68342 4.90237 9.31658 4.90237 9.70711 5.29289C10.0976 5.68342 10.0976 6.31658 9.70711 6.70711L5.41421 11L21 11C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13L5.41422 13L9.70711 17.2929Z" data-astro-cid-c4cqltiy></path> </svg> All articles </a> </div>  </main> <button class="scroll-to-top" type="button" aria-label="Scroll to top" title="Scroll to top" data-astro-cid-73562bqz> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-73562bqz> <polyline points="18 15 12 9 6 15" data-astro-cid-73562bqz></polyline> </svg> </button>  <script type="module">function i(){const o=document.querySelector(".scroll-to-top");if(!o)return;const e=300;function t(){o&&(window.scrollY>e?o.classList.add("is-visible"):o.classList.remove("is-visible"))}function s(){window.scrollTo({top:0,behavior:"smooth"})}window.addEventListener("scroll",t,{passive:!0}),o.addEventListener("click",s),t()}i();document.addEventListener("astro:after-swap",i);</script>   </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <div class="footer-container" data-astro-cid-sz7xmlte> <span class="copyright" data-astro-cid-sz7xmlte>© 2026 Your Name</span>  </div> </footer>  </body></html>
