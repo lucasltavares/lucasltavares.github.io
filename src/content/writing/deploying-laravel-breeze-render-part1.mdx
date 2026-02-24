@@ -1,0 +1,182 @@
+---
+title: "Deploying a Laravel Breeze App on Render: Step-by-Step Guide (Part 1)"
+description: "Learn how to configure a Docker environment for deploying a Laravel Breeze application on Render cloud platform."
+publishDate: 2023-08-10
+tags:
+  - "laravel"
+  - "docker"
+  - "deployment"
+  - "render"
+  - "devops"
+draft: false
+---
+
+On this tutorial I'll explain how to deploy a Laravel app using Breeze starter kit on Render.
+
+Render is a cloud application platform that allows users to perform automated deploys of their projects hosted on any git repository with many features like logs and metrics monitoring, scaling, automating and much more, check out all of their features on [this link](https://render.com/).
+
+## 1. Configuring The Docker Environment
+
+In order to deploy a Laravel app on our Render workspace we'll first need to configure a docker environment with a `Dockerfile`, `Nginx conf` and a deploy bash script.
+
+## 2. .Dockerignore
+
+First, we'll need to create our `.dockerignore` file on the project root folder in order to specify which files will not be included on the build process, so our docker image become lighter.
+
+```bash
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+```
+
+## 3. Creating the Dockerfile
+
+On this step we'll create our Dockerfile on the project root folder, specifying all the resources that we need to run our Laravel app with Breeze starter kit:
+
+```docker
+FROM richarvey/nginx-php-fpm:latest
+# Make sure the system is ready to install packages
+USER root
+RUN apk update && \
+    apk add --no-cache curl nodejs npm && \
+    npm install -g npm@latest
+COPY . .
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
+
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
+
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
+CMD ["/start.sh"]
+```
+
+We added this specific instruction to install Node.js on our image in order to run Vite, which is included in Laravel Breeze:
+
+```bash
+RUN apk update && \
+    apk add --no-cache curl nodejs npm && \
+    npm install -g npm@latest
+```
+
+## 4. Nginx Configuration
+
+Now we'll create a directory on our project root folder named `conf/nginx` and place the following `nginx-site.conf` file:
+
+```nginx
+server {
+  # Render provisions and terminates SSL
+  listen 80;
+  server_name _;
+  root /var/www/html/public;
+  index index.html index.htm index.php;
+  sendfile off;
+  error_log /dev/stdout info;
+  access_log /dev/stdout;
+
+  location /.git {
+    deny all;
+    return 403;
+  }
+
+  add_header X-Frame-Options "SAMEORIGIN";
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Content-Type-Options "nosniff";
+  charset utf-8;
+
+  location / {
+      try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location = /robots.txt  { access_log off; log_not_found off; }
+  error_page 404 /index.php;
+
+  location ~* \.(jpg|jpeg|gif|png|css|js|ico|webp|tiff|ttf|svg)$ {
+    expires 5d;
+  }
+
+  location ~ \.php$ {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+    include fastcgi_params;
+  }
+
+  location ~ /\. {
+    log_not_found off;
+    deny all;
+  }
+
+  location ~ /\.(?!well-known).* {
+    deny all;
+  }
+}
+```
+
+## 5. Build Script
+
+Finally, on our project root folder we'll create a `scripts` directory and inside a bash build script named `00-laravel-deploy.sh` used by Render to run bootstrap Laravel commands like migrations, composer install and also our npm commands needed by Vite:
+
+```bash
+#!/usr/bin/env bash
+echo "Running composer"
+composer global require hirak/prestissimo
+composer install --no-dev --working-dir=/var/www/html
+echo "Caching config..."
+php artisan config:cache
+echo "Caching routes..."
+php artisan route:cache
+echo "Running npm install..."
+npm install
+echo "Running npm build..."
+npm run build
+echo "Running migrations..."
+php artisan migrate --force
+```
+
+## 6. HTTPS Configuration
+
+There's a configuration in Laravel's AppServiceProvider so our app can run using `https`. Let's add it to our `app/Providers/AppServiceProvider.php` file:
+
+```php
+namespace App\Providers;
+
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    // ...
+
+    public function boot(UrlGenerator $url)
+    {
+        if (env('APP_ENV') == 'production') {
+            $url->forceScheme('https');
+        }
+    }
+}
+```
+
+## Push to GitHub
+
+Now, we have to push this project to a GitHub repository, and in the next part of this tutorial we'll access Render's admin panel and run our application on the cloud!
+
+Continue to [Part 2](/writing/deploying-laravel-breeze-render-part2) →

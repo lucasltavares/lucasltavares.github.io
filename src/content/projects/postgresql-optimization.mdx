@@ -1,0 +1,72 @@
+---
+title: "PostgreSQL Performance Optimization & High Availability"
+role: "Full Stack Developer"
+year: 2025
+duration: "6 months"
+teamSize: 3
+outcomeSummary: "Reduced query execution time by over 50% and improved data integrity through table partitioning and read replication"
+overview: "Led a comprehensive PostgreSQL optimization initiative for an omnichannel messaging platform processing millions of records daily, implementing table partitioning, read replicas, and strategic indexing to dramatically improve performance."
+problem: "The platform's PostgreSQL database was suffering from increasingly slow query execution times as data volumes grew. Critical queries on large tables were taking several seconds, impacting user experience and system reliability. The monolithic database setup also posed risks for data integrity and availability."
+constraints:
+  - "Zero downtime required — production system serving clients 24/7"
+  - "Must maintain backward compatibility with existing application queries"
+  - "Large volume of historical data that needed to be partitioned without data loss"
+  - "Limited maintenance windows for schema changes"
+approach: "Implemented a multi-phase approach starting with analysis of slow queries and table growth patterns. Designed a date-based partitioning strategy for the largest tables, configured read replicas to distribute query load, and applied strategic indexing. Each phase was tested in staging before rolling out to production with zero downtime."
+keyDecisions:
+  - decision: "Use date-based table partitioning for high-volume tables"
+    reasoning: "Date-based partitioning aligned with the natural access patterns of the messaging data — most queries filter by date ranges. This allowed PostgreSQL to prune irrelevant partitions, dramatically reducing the amount of data scanned per query."
+    alternatives:
+      - "Hash-based partitioning"
+      - "List-based partitioning by client"
+      - "Archiving old data to separate tables"
+  - decision: "Implement read replicas for query distribution"
+    reasoning: "Separating read and write workloads improved performance for both. Reporting and analytics queries no longer competed with real-time transactional writes, improving overall system responsiveness."
+    alternatives:
+      - "Vertical scaling (bigger server)"
+      - "Caching layer with Redis"
+      - "Sharding across multiple databases"
+  - decision: "Strategic composite indexing based on query analysis"
+    reasoning: "Analyzed the most frequent and slow queries using pg_stat_statements and EXPLAIN ANALYZE, then created targeted composite indexes that covered the most common access patterns without over-indexing."
+    alternatives:
+      - "Adding individual column indexes"
+      - "Materialized views for complex queries"
+techStack:
+  - "PostgreSQL"
+  - "Laravel"
+  - "Lumen"
+  - "PHP"
+  - "Bash"
+  - "Vultr Cloud"
+impact:
+  metrics:
+    - label: "Query Execution Time"
+      value: "50%+ reduction on critical queries"
+    - label: "Data Integrity"
+      value: "Automated partition management with zero data loss"
+    - label: "Read Performance"
+      value: "Significant improvement via read replica distribution"
+  qualitative: "The optimization initiative transformed the platform's database layer from a bottleneck into a reliable, high-performance foundation. Query times that previously caused timeouts now execute within acceptable thresholds. The partitioning strategy also simplified data lifecycle management, making it easy to archive or drop old partitions. The read replica setup provides both performance benefits and an additional layer of data protection."
+learnings:
+  - "Table partitioning should be planned early — retrofitting it on large tables requires careful migration strategies"
+  - "Read replicas are not just for scaling reads — they also serve as a safety net for data integrity"
+  - "Query analysis with pg_stat_statements is essential before any optimization — measure first, then optimize"
+  - "Zero-downtime schema changes in PostgreSQL require careful planning with concurrent index creation and partition attachment"
+featured: true
+status: completed
+order: 1
+---
+
+## Technical Details
+
+### Table Partitioning Strategy
+
+The largest tables were partitioned by date ranges, allowing PostgreSQL's query planner to automatically prune partitions that don't match the query's date filter. This reduced the amount of data scanned per query from millions of rows to thousands.
+
+### Read Replica Configuration
+
+Configured streaming replication with automatic failover capabilities. Application-level query routing directs read-only queries to replicas while writes go to the primary, distributing the load effectively.
+
+### Incremental Backup Strategy
+
+Implemented automated incremental backups with point-in-time recovery capabilities, ensuring data integrity and disaster recovery readiness.

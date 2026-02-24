@@ -42,35 +42,16 @@ import { getCollection } from 'astro:content';
 import { siteConfig } from '../config';
 
 /**
- * Queries and filters featured projects for hero section
- * 
- * Retrieves all projects, filters for featured ones, sorts by custom order
- * (if specified), and limits to top 2 for the hero snapshots.
+ * Queries the latest 2 writing posts for hero section cards
  */
-const allProjects = await getCollection('projects');
-const featuredProjects = allProjects
-  .filter(project => project.data.featured === true)
-  .sort((a, b) => (a.data.order || 999) - (b.data.order || 999))
+const allWriting = await getCollection('writing');
+const latestPosts = allWriting
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
   .slice(0, 2);
 
-/**
- * Case snapshots for hero display
- * 
- * Takes up to 3 featured projects to showcase in the hero section,
- * providing immediate evidence of impact and outcomes.
- */
-const caseSnapshots = featuredProjects.slice(0, 3);
 
-/**
- * Queries recent decisions for preview section
- * 
- * Retrieves all decisions, sorts by date (newest first), and limits to
- * top 2 for the homepage preview.
- */
-const allDecisions = await getCollection('decisions');
-const recentDecisions = allDecisions
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 2);
+
 ---
 
 <BaseLayout>
@@ -93,32 +74,35 @@ const recentDecisions = allDecisions
         <!-- Left: Value Statement -->
         <div class="hero-left">
           <h1 class="hero-title">
-            I don't just ship projects.<br/>
-            <span class="hero-title-emphasis">I document decisions, trade-offs, and outcomes.</span>
+            Building scalable systems<br/>
+            <span class="hero-title-emphasis">with clean architecture and real impact.</span>
           </h1>
           <p class="hero-sub">
-            A portfolio built around case studies — not screenshots.
+            Full Stack Developer focused on backend, microservices, and cloud infrastructure.
           </p>
           <p class="hero-meta">
             {siteConfig.author.name} · {siteConfig.author.title}
           </p>
           <div class="hero-cta">
             <a href="/projects" class="btn-primary">Explore Case Studies</a>
-            <a href="/decisions" class="btn-secondary">How I Make Decisions</a>
+            <a href="/writing" class="btn-secondary">Read My Articles</a>
           </div>
         </div>
 
-        <!-- Right: Case Snapshots test 2-->
-        <!-- ok -->
+        <!-- Right: Latest Articles -->
         <div class="hero-right">
           <div class="case-snapshots">
-            {caseSnapshots.map((project) => (
-              <a href={`/projects/${project.id}`} class="case-snapshot">
-                <span class="case-label">Case · {project.data.role}</span>
-                <span class="case-title">{project.data.title}</span>
-                <span class="case-outcome">{project.data.outcomeSummary}</span>
-              </a>
-            ))}
+            {latestPosts.map((post) => {
+              const date = post.data.publishDate;
+              const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+              return (
+                <a href={`/writing/${post.id}`} class="case-snapshot">
+                  <span class="case-label">Article · {formattedDate}</span>
+                  <span class="case-title">{post.data.title}</span>
+                  <span class="case-outcome">{post.data.description}</span>
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -127,39 +111,15 @@ const recentDecisions = allDecisions
     <!-- Introduction -->
     <section class="introduction">
       <p>
-        I'm {siteConfig.author.name}, {siteConfig.author.title.toLowerCase()} focused on building systems that move real business metrics.
+        I'm {siteConfig.author.name}, a {siteConfig.author.title.toLowerCase()} with 6+ years of experience building scalable backend systems and cloud infrastructure.
       </p>
       <p>
-        Every major decision is documented—because great engineers don't just build things, they explain why.
+        From infrastructure to full stack development — I focus on performance, clean code, and delivering high-impact solutions.
       </p>
       <ForwardLink href="/journey" text="Read my journey" variant="muted" />
     </section>
 
-    <!-- Recent Decisions -->
-    <section class="recent-decisions">
-      <div class="section-header">
-        <h2>Recent Decisions</h2>
-        <ForwardLink href="/decisions" text="View all" variant="muted" />
-      </div>
-      
-      {recentDecisions.length > 0 ? (
-        <div class="decisions-list">
-          {recentDecisions.map((decision) => {
-            const date = new Date(decision.data.date);
-            const formattedDate = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-            return (
-              <article class="decision-item">
-                <span class="decision-date">{formattedDate}</span>
-                <h3 class="decision-title">{decision.data.title}</h3>
-                <p class="decision-context">{decision.data.context}</p>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <p class="no-decisions">No decisions documented yet.</p>
-      )}
-    </section>
+
 
     <!-- Testimonials -->
     <Testimonials limit={3} />
@@ -168,7 +128,7 @@ const recentDecisions = allDecisions
     <section class="thinking">
       <h2>Problems I Enjoy Solving</h2>
       <p class="thinking-list">
-        How to scale systems without scaling complexity · When to choose consistency over availability · Making legacy codebases maintainable · Designing APIs that last · Building teams that ship · Turning technical debt into technical investment · Documenting decisions so future-you understands past-you
+        Optimizing database performance at scale · Building resilient microservices architectures · Automating infrastructure and deployments · Designing clean and maintainable APIs · Reducing response times and improving user experience · Implementing security best practices · Making legacy codebases sustainable
       </p>
     </section>
 

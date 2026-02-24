@@ -1,0 +1,60 @@
+---
+title: "Deploying a Laravel Breeze App on Render (Part 2)"
+description: "The final steps to deploy your Laravel Breeze application on Render: configuring the PostgreSQL database, web service, and environment variables."
+publishDate: 2023-08-17
+tags:
+  - "laravel"
+  - "docker"
+  - "deployment"
+  - "render"
+  - "postgresql"
+draft: false
+---
+
+Now that we've successfully configured our Laravel app to be published on Render cloud, we'll access the admin panel to configure the environment and finally deploy our application!
+
+## 1. Create a Render Account and Project
+
+First we'll login to our Render account and create a new project, filling it with our project's info.
+
+![Creating a new project on Render](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/1jpx5771jfal906oofuk.jpeg)
+
+## 2. Create the PostgreSQL Database
+
+Now, on our brand new project we'll first create our PostgreSQL database. Go to `+ New` on top right and click `PostgreSQL`.
+
+![Creating PostgreSQL database on Render](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/iwab7ppeeosk5p3i34o9.jpeg)
+
+## 3. Copy the Internal Database URL
+
+After creating our database instance we'll need to copy the internal database URL. Access your database instance and copy it here:
+
+![Copying the internal database URL](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/pj1rmelaf5r8risokqkd.jpeg)
+
+## 4. Create the Web Service
+
+Now we'll create our Web Service instance. On top right click `+ New → Web Service` and select your Laravel project on GitHub.
+
+![Selecting the GitHub repository](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3p56h01vpcnzngnb3i5r.jpeg)
+
+On language select choose `Docker`:
+
+![Selecting Docker as the language](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/v9xad0ccd34hl05k9tyg.jpeg)
+
+## 5. Add Environment Variables
+
+Now, add the required environment variables:
+
+![Adding environment variables](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ejhpkh5ety1tpi8m4gkk.jpeg)
+
+## 6. Deploy!
+
+Now just click **Deploy Web Service** and see the magic happening!
+
+![Deploying the web service](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/o0b5c4xbo43udyoeaiaj.jpeg)
+
+After that you'll see a success message and receive a link to access your project online. Have fun!
+
+![Deployment success](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/sw5b3l37yt4kwc41jecd.jpeg)
+
+← Back to [Part 1](/writing/deploying-laravel-breeze-render-part1)

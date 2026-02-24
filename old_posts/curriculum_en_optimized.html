@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Lima Tavares - Full Stack Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            padding: 40px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .contact-info a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .section {
+            margin-bottom: 28px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .job {
+            margin-bottom: 20px;
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        
+        .job-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .job-date {
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .company {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .company strong {
+            color: #2c3e50;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .skill-category {
+            font-size: 14px;
+        }
+        
+        .skill-category strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .summary {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 8px;
+        }
+        
+        .education-item {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .education-item strong {
+            color: #2c3e50;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .contact-info a {
+                color: #2c3e50;
+            }
+        }
+        
+        .download-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+        }
+        
+        @media print {
+            .download-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>LUCAS LIMA TAVARES</h1>
+        <div class="subtitle">Full Stack Developer | Backend & Systems Architecture Specialist</div>
+        <div class="contact-info">
+            <span>📍 Peruíbe, SP, Brazil</span>
+            <span>📞 +55 (13) 99742-3162</span>
+            <span>✉️ <a href="mailto:lucas.limatfreitas@gmail.com">lucas.limatfreitas@gmail.com</a></span>
+            <span>💼 <a href="https://www.linkedin.com/in/lucas-lima-tavares/">LinkedIn</a></span>
+            <span>💻 <a href="https://github.com/lucasltavares">GitHub</a></span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>PROFESSIONAL SUMMARY</h2>
+        <p class="summary">
+            Results-driven Full Stack Developer with 6+ years of experience in technology, including 3+ years specializing in backend development and scalable system architecture. Strong expertise in PHP, Laravel, PostgreSQL, and microservices, with proven track record of optimizing performance and reducing response times by over 50%. Comprehensive experience across the development stack—from cloud infrastructure to front-end interfaces—with demonstrated ability to solve complex problems and deliver high-impact business solutions.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>TECHNICAL SKILLS</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <strong>Backend & APIs:</strong>
+                PHP, Laravel, Lumen, Node.js, REST API, Microservices, SOLID Principles, Design Patterns
+            </div>
+            <div class="skill-category">
+                <strong>Databases:</strong>
+                PostgreSQL, MySQL, Query Optimization, Table Partitioning, Replication, Indexing
+            </div>
+            <div class="skill-category">
+                <strong>Frontend:</strong>
+                JavaScript, Vue.js, HTML5, CSS3, Responsive Design, UI/UX
+            </div>
+            <div class="skill-category">
+                <strong>DevOps & Cloud:</strong>
+                Docker, Jenkins, CI/CD Pipelines, Linux, Bash Scripting, Vultr, Monitoring (Site24x7, Prometheus, Grafana)
+            </div>
+            <div class="skill-category">
+                <strong>Security & Compliance:</strong>
+                Two-Factor Authentication (2FA), GDPR/LGPD Compliance, ISO 27001, VPN IPsec, Strongswan
+            </div>
+            <div class="skill-category">
+                <strong>Tools & Methodologies:</strong>
+                Git, GitHub, Jira, Agile, Scrum, Code Review, Technical Documentation
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>PROFESSIONAL EXPERIENCE</h2>
+        
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">Mid-Level Full Stack Developer</div>
+                <div class="job-date">Mar 2025 – Present</div>
+            </div>
+            <div class="company"><strong>Yup Chat</strong> | Engineering Team | São Paulo, Brazil</div>
+            <ul>
+                <li><strong>Performance Optimization:</strong> Reduced critical query execution time by over 50% by implementing table partitioning and read replicas in PostgreSQL, significantly improving user experience</li>
+                <li><strong>Feature Development:</strong> Built complete modules from scratch for omnichannel platform, including third-party API integrations and webhook implementations</li>
+                <li><strong>Application Security:</strong> Implemented two-factor authentication (2FA) and email verification, elevating platform security and reducing unauthorized access incidents</li>
+                <li><strong>Code Quality & Maintainability:</strong> Refactored critical modules applying SOLID principles and design patterns, increasing code maintainability and facilitating feature expansion</li>
+                <li><strong>DevOps & Standardization:</strong> Created custom Dockerfiles and Docker Compose configurations, simplifying development environment setup and reducing onboarding time for new developers</li>
+                <li><strong>Tech Stack:</strong> Laravel, Lumen, PostgreSQL, Vue.js, Docker, REST APIs</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">Junior Full Stack Developer</div>
+                <div class="job-date">2024 – 2025</div>
+            </div>
+            <div class="company"><strong>Yup Chat</strong> | Customer Success Team | São Paulo, Brazil</div>
+            <ul>
+                <li><strong>Microservices Architecture:</strong> Developed and maintained REST APIs in PHP/Lumen within microservices architecture, ensuring high availability and scalability</li>
+                <li><strong>Database Performance:</strong> Implemented advanced optimizations including strategic indexing, table partitioning, read replication, and automated backups in PostgreSQL</li>
+                <li><strong>Full Stack Development:</strong> Created responsive and intuitive UI components, seamlessly integrating frontend and backend systems</li>
+                <li><strong>Infrastructure & Monitoring:</strong> Managed cloud servers on Vultr with proactive monitoring via Site24x7 and automated recovery using Bash scripts</li>
+                <li><strong>CI/CD:</strong> Configured continuous integration and delivery pipelines with Jenkins, reducing deployment time and increasing release reliability</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">Infrastructure Analyst</div>
+                <div class="job-date">2020 – 2024</div>
+            </div>
+            <div class="company"><strong>Yup Chat</strong> | São Paulo, Brazil</div>
+            <ul>
+                <li><strong>Linux Server Administration:</strong> Managed cloud environments with focus on high availability, security, and process automation</li>
+                <li><strong>Monitoring & Observability:</strong> Implemented monitoring stack with Site24x7, Prometheus, and Grafana for proactive incident detection and metrics analysis</li>
+                <li><strong>L3 Incident Resolution:</strong> Resolved critical incidents for national and international clients, ensuring SLA compliance and customer satisfaction</li>
+                <li><strong>Security & Compliance:</strong> Collaborated directly with DPO on security policy implementation, GDPR/LGPD compliance, and ISO 27001 requirements</li>
+                <li><strong>Network Infrastructure:</strong> Configured IPsec VPN tunnels using Strongswan for secure connections between environments</li>
+                <li><strong>Database Administration:</strong> Managed PostgreSQL including replication configuration, incremental backups, and disaster recovery</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">Front-end Developer Trainee</div>
+                <div class="job-date">2019 – 2020</div>
+            </div>
+            <div class="company"><strong>Yup Chat</strong> | São Paulo, Brazil</div>
+            <ul>
+                <li>Developed and maintained responsive web interfaces for institutional websites, landing pages, and digital marketing campaigns</li>
+                <li>Created responsive and interactive email marketing templates, optimizing conversion rates</li>
+                <li>Utilized HTML5, CSS3, JavaScript (Vanilla and Vue.js) with focus on performance and cross-browser compatibility</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">IT Support Analyst</div>
+                <div class="job-date">2018 – 2019</div>
+            </div>
+            <div class="company"><strong>Yup Chat</strong> | São Paulo, Brazil</div>
+            <ul>
+                <li>Provided L2 technical support to users, resolving hardware, software, and network issues</li>
+                <li>Performed SQL database operations to support internal systems</li>
+                <li>Maintained IT infrastructure including preventive and corrective equipment maintenance</li>
+            </ul>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="job-title">IT Intern</div>
+                <div class="job-date">2018 – 2019</div>
+            </div>
+            <div class="company"><strong>City Hall of Peruíbe</strong> | São Paulo, Brazil</div>
+            <ul>
+                <li>L1 technical support, equipment configuration, and network setup for municipal infrastructure</li>
+                <li>VoIP phone configuration using 3CX for interdepartmental communication</li>
+                <li>Router and switch configuration for connectivity optimization</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>EDUCATION</h2>
+        <div class="education-item">
+            <strong>Associate Degree in Systems Analysis and Development</strong><br>
+            Technology College of Praia Grande (FATEC) | 2013 – 2014
+        </div>
+        <div class="education-item">
+            <strong>Technical Certificate in Computer Science (High School Integrated)</strong><br>
+            ETEC Itanhaém | 2010 – 2013
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>PROJECTS & ACHIEVEMENTS</h2>
+        <ul>
+            <li><strong>Open Source Portfolio:</strong> Projects available on GitHub demonstrating full stack development expertise</li>
+            <li><strong>Technical Blog:</strong> Author of articles about Laravel development, cloud deployment, and programming best practices</li>
+            <li><strong>Community Contributions:</strong> Active participation in development communities and code reviews</li>
+        </ul>
+    </div>
+
+    <a href="#" class="download-btn" onclick="window.print(); return false;">📥 Download PDF</a>
+
+    <script>
+        // Function to generate PDF via print
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add metadata for better ATS compatibility
+            const meta = document.createElement('meta');
+            meta.name = 'keywords';
+            meta.content = 'full stack developer, PHP, Laravel, PostgreSQL, backend developer, REST API, microservices, DevOps, Docker, CI/CD';
+            document.head.appendChild(meta);
+        });
+    </script>
+</body>
+</html>
