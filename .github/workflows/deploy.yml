@@ -35,7 +35,6 @@ jobs:
           SOCIAL_BLUESKY: ${{ vars.SOCIAL_BLUESKY }}
           SITE_TITLE: ${{ vars.SITE_TITLE }}
           SITE_DESCRIPTION: ${{ vars.SITE_DESCRIPTION }}
-          SITE_TITLE: ${{ vars.SITE_TITLE }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
