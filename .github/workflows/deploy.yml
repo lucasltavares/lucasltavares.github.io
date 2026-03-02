@@ -33,7 +33,7 @@ jobs:
           SOCIAL_TWITTER: ${{ vars.SOCIAL_TWITTER }}
           SOCIAL_MASTODON: ${{ vars.SOCIAL_MASTODON }}
           SOCIAL_BLUESKY: ${{ vars.SOCIAL_BLUESKY }}
-          SITE_TITLE: ${{ vars.SITE_TITLE }}
+          PUBLIC_SITE_TITLE: ${{ vars.PUBLIC_SITE_TITLE }}
           SITE_DESCRIPTION: ${{ vars.SITE_DESCRIPTION }}
       - uses: actions/upload-pages-artifact@v3
         with:
