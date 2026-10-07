@@ -1,0 +1,86 @@
+---
+import type { MarkdownHeading, MDXInstance } from "astro";
+
+import { createOgImageLink } from "../lib/createOgImageLink";
+import { formatDate } from "../lib/formatDate";
+import Image from "../lib/prose/Image.astro";
+import { blogPostingSchema } from "../lib/seo/jsonLd";
+import JsonLd from "../lib/seo/JsonLd.astro";
+import { AUTHOR } from "../lib/siteMeta";
+import TableOfContents from "../lib/TableOfContents/TableOfContents.astro";
+import type { PostFrontmatter } from "../types";
+
+import BaseLayout from "./BaseLayout.astro";
+
+import "../global-styles/shiki.css";
+
+interface Props extends Omit<MDXInstance<{}>, "frontmatter"> {
+  frontmatter: PostFrontmatter;
+  headings: MarkdownHeading[];
+}
+
+const { frontmatter, headings } = Astro.props;
+
+const ogImage = createOgImageLink(frontmatter);
+const readingTime = frontmatter.readingTime;
+const date = new Date(frontmatter.date);
+const imgSrc =
+  typeof frontmatter.img === "object" ? frontmatter.img.src : frontmatter.img;
+const description = frontmatter.description || "";
+
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : Astro.url.pathname;
+
+const postSchema = blogPostingSchema({
+  headline: frontmatter.title,
+  datePublished: date.toISOString(),
+  description: frontmatter.description,
+  author: AUTHOR,
+  canonical,
+});
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  ogImage={ogImage}
+  description={description}
+>
+  <JsonLd data={postSchema} slot="head" />
+  <main class="zaduma-prose py-4">
+    <header
+      class="flex flex-col items-start justify-between sm:flex-row sm:items-center"
+    >
+      <h1 class="my-0!">{frontmatter.title}</h1>
+      <div class="text-right text-gray-600 dark:text-gray-400">
+        {
+          readingTime.minutes > 1 && (
+            <>
+              <span>{readingTime.text}</span>
+              {" · "}
+            </>
+          )
+        }
+        <time
+          datetime={date.toISOString()}
+          class="tracking-tighter tabular-nums"
+        >
+          {formatDate(date)}
+        </time>
+      </div>
+    </header>
+    {
+      imgSrc && (
+        <Image alt="" src={imgSrc} format="webp" width={774} aspectRatio={2} />
+      )
+    }
+    <slot />
+  </main>
+  <TableOfContents headings={headings} />
+  <style is:global>
+    /* make the spacing even when there's no callout nor image */
+    .zaduma-prose > header + :is(p, .zaduma-aside) {
+      margin-top: 2em;
+    }
+  </style>
+</BaseLayout>

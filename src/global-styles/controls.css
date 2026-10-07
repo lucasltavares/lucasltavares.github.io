@@ -1,0 +1,27 @@
+@reference "./base.css";
+
+.zaduma-hover-before {
+  @apply selected:before:bg-gray-100 dark:selected:before:bg-gray-800/60 relative before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-md before:bg-transparent before:transition-colors before:content-[''] focus:before:bg-gray-100 dark:focus:before:bg-gray-800/60;
+}
+
+@media (hover: hover) {
+  .zaduma-hover-before:hover::before {
+    @apply bg-gray-100;
+  }
+
+  .dark .zaduma-hover-before:hover::before {
+    @apply bg-gray-800/60;
+  }
+}
+
+/*
+ * This isn't needed if your base font-size is 16px or higher.
+ * IOS Safari zooms in on inputs on focus if their text size is smaller than 16px.
+ */
+@supports (-webkit-overflow-scrolling: touch) {
+  input,
+  textarea,
+  select {
+    @apply text-lg;
+  }
+}

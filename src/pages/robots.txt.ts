@@ -1,58 +1,49 @@
-/**
- * Robots.txt API Route
- * 
- * Dynamically generates the robots.txt file for search engine crawlers.
- * Allows all user agents to crawl the entire site and provides the sitemap location.
- * 
- * Features:
- * - Allows all crawlers (User-agent: *)
- * - Permits crawling of all paths (Allow: /)
- * - References the sitemap for better indexing
- * - Normalizes site URL (removes trailing slash)
- * - Returns proper text/plain content type
- * 
- * Route: /robots.txt
- * 
- * @example
- * Generated output:
- * ```
- * User-agent: *
- * Allow: /
- * 
- * Sitemap: https://example.com/sitemap-index.xml
- * ```
- */
+import type { APIRoute } from "astro";
 
-import type { APIRoute } from 'astro';
-import { siteConfig } from '../config';
+// AI/LLM training & answer-engine crawlers. Default to Allow so the starter
+// is "agent-ready"; downstream sites can override this list.
+const AI_BOTS = [
+  "GPTBot",
+  "ClaudeBot",
+  "ClaudeUser",
+  "PerplexityBot",
+  "Google-Extended",
+  "CCBot",
+  "Applebot-Extended",
+  "Bytespider",
+  "Amazonbot",
+];
 
-/**
- * GET handler for robots.txt
- * 
- * Generates the robots.txt content dynamically using the site URL from configuration.
- * Normalizes the URL by removing trailing slashes to ensure consistent sitemap URLs.
- * 
- * @returns Response with robots.txt content and text/plain content type
- */
-export const GET: APIRoute = () => {
-  /**
-   * Normalizes the site URL by removing trailing slash
-   * 
-   * Ensures the sitemap URL is consistently formatted without double slashes.
-   */
-  const siteUrl = siteConfig.url.endsWith('/') 
-    ? siteConfig.url.slice(0, -1) 
-    : siteConfig.url;
+// https://contentsignals.org — declares how crawled content may be used after
+// access. Three signals: search (index & link), ai-input (RAG / live answers),
+// ai-train (model training). Default to yes to keep the starter "agent-ready".
+// Goes inside a User-agent group; the directive name is singular per the spec.
+const CONTENT_SIGNAL = "search=yes, ai-input=yes, ai-train=yes";
 
-  const robotsTxt = `User-agent: *
-Allow: /
+export const GET: APIRoute = ({ site }) => {
+  if (!site) {
+    throw new Error("`site` must be set in astro.config for robots.txt");
+  }
 
-Sitemap: ${siteUrl}/sitemap-index.xml
-`;
+  const lines: string[] = [
+    "User-agent: *",
+    `Content-Signal: ${CONTENT_SIGNAL}`,
+    "Allow: /",
+    "",
+  ];
 
-  return new Response(robotsTxt, {
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-    },
+  for (const bot of AI_BOTS) {
+    lines.push(
+      `User-agent: ${bot}`,
+      `Content-Signal: ${CONTENT_SIGNAL}`,
+      "Allow: /",
+      "",
+    );
+  }
+
+  lines.push(`Sitemap: ${new URL("sitemap-index.xml", site).href}`);
+
+  return new Response(lines.join("\n") + "\n", {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 };

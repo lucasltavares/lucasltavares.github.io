@@ -1,0 +1,2 @@
+# prettier-plugin-astro 0.14 cannot parse a style block inside this conditional.
+src/lib/TableOfContents/TableOfContents.astro

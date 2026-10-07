@@ -1,0 +1,23 @@
+@reference "../../global-styles/base.css";
+
+.Table {
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  & thead {
+    @apply border-b;
+  }
+
+  & th {
+    text-align: left;
+  }
+
+  & th,
+  & td {
+    @apply px-2 py-1 md:px-4;
+  }
+}
+
+:global(.dark) .Table thead {
+  @apply border-gray-700;
+}
